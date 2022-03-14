@@ -1,4 +1,5 @@
-package Problem;
+
+package data_structure;
 
 import java.util.LinkedList;
 import java.util.List;
