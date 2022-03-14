@@ -35,6 +35,19 @@ public class Generic_Tree {
         }
     }
 
+    private static int size(Node root) {
+        if(root == null){
+            return 0;
+        }
+        int s = 0;
+        for(Node temp : root.children){
+            int cs = size(temp);
+            s += cs;
+        }
+        s++;
+        return s;
+    }
+
     private static void print(Node root) {
         if(root == null){
             return;
@@ -46,13 +59,30 @@ public class Generic_Tree {
         return;
     }
 
+    private static int menu()throws IOException{
+        System.out.println("\n1 - Check Size");
+        System.out.println("2 - User Trace");
+        return Input.input_int();
+    }
+
     public static void main(String[] args)throws IOException {
         int n = Input.input_int();
         int[] arr = Input.input_intarr(' ');
 
         create(arr);
-
-        print(root);
+        while(true){
+            switch(menu()){
+                case 1:
+                    Node temp = root;
+                    System.out.println(size(temp));
+                    break;
+                case 2:
+                    temp = root;
+                    print(temp);
+                    break;
+                default:
+                    System.exit(0);
+            }
+        }
     }
-
 }
