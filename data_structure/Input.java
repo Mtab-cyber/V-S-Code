@@ -36,6 +36,17 @@ public class Input {
         }
         return arr;
     }
+
+    public static Integer[] input_Intarr(String string)throws IOException{
+        String[] str = br.readLine().split(string+"");
+        Integer[] arr = new Integer[str.length];
+        int i = 0;
+        for(String temp : str){
+            arr[i++] = Integer.valueOf(temp);
+        }
+        return arr;
+    }
+
     public static double[] input_doublearr(char ch)throws IOException{
         String[] str = br.readLine().split(ch+"");
         double[] arr = new double[str.length];
