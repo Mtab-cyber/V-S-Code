@@ -591,7 +591,6 @@ public class Generic_Tree {
         if(sdch + dch + 2 > dia){
             dia = sdch + dch + 2;
         }
-
         dch += 1;
 
         return dch;
