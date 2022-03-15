@@ -32,10 +32,15 @@ public class Generic_Tree {
         }
     }
 
-    static int size;
-    static int min;
-    static int max;
-    static int height;
+    private static int size;
+    private static int min;
+    private static int max;
+    private static int height;
+    private static Node predecessor;
+    private static Node successor;
+    private static int state;
+    private static int ciel;
+    private static int floor;
 
     private static Node create(int[] arr) {
         Stack<Node> stk = new Stack<>();
@@ -401,6 +406,62 @@ public class Generic_Tree {
         }
     }
 
+    private static void getPredecessor_Successor(Node root, int data) {
+        if(state == 0){
+            if(root.data == data){
+                state = 1;
+            }
+            else{
+                predecessor = root;
+            }
+        }
+        else if(state == 1){
+            successor = root;
+            state = 2;
+            return;
+        }
+
+        for(Node temp : root.children){
+            getPredecessor_Successor(temp,data);
+        }
+    }
+
+    private static void getCielandFloor(Node root, int data){
+        if(root.data < data){
+            floor = Math.min(floor,root.data);
+        }
+        if(root.data > data){
+            ciel = Math.min(ciel, root.data);
+        }
+
+        for(Node temp : root.children){
+            getCielandFloor(temp,data);
+        }
+    }
+
+    private static void getKthLargest(Node root,int k){
+        int factor = Integer.MIN_VALUE;
+        while(k-->0){
+            getCielandFloor(root,factor);
+            factor = floor;
+            floor = Integer.MAX_VALUE;
+        }
+    }
+
+    private static void itr_postOrder(Node temp) {
+    }
+
+    private static void itr_preOrder(Node temp) {
+    }
+
+    private static int getDiaOfTree(Node temp) {
+        return 0;
+    }
+
+    private static int getNodeWithMaxSubTree(Node temp) {
+        return 0;
+    }
+
     private static int menu()throws IOException{
         System.out.println("\n1 - Check Size");
         System.out.println("2 - User Trace");
@@ -420,11 +481,17 @@ public class Generic_Tree {
         System.out.println("16 - Check is both Trees are Similar");
         System.out.println("17 - Check if the tree is a Mirror of orignal");
         System.out.println("18 - Check if the tree is Symmetric");
+        System.out.println("19 - MultiSolver");
+        System.out.println("20 - Get Predecessor and Successor");
+        System.out.println("21 - Get Ciel and Floor");
+        System.out.println("22 - Get Kth Largest Element");
+        System.out.println("23 - Node with maximum subtree");
+        System.out.println("24 - Diameter of the Generic Tree");
+        System.out.println("25 - Iterative Pre-Order and Post-Order");
         return Input.input_int();
     }
 
     public static void main(String[] args)throws IOException {
-        int n = Input.input_int();
         int[] arr = Input.input_intarr(" ");
 
         create(arr);
@@ -519,7 +586,41 @@ public class Generic_Tree {
                     max = Integer.MIN_VALUE;
                     multiSolver(temp,0);
                     System.out.println("Min Element : "+min+"\nMax Element : "+max+"\nHeight of Tree : "+height+"\nSize of Tree : "+size);
-                    break;         
+                    break; 
+                case 20:
+                    temp = root;
+                    state = 0;
+                    predecessor = null;
+                    successor = null;
+                    getPredecessor_Successor(temp,Input.input_int());
+                    System.out.println("Predecessor : "+predecessor+"\nSuccessor : "+successor);
+                    break;
+                case 21:
+                    temp = root;
+                    ciel = Integer.MIN_VALUE;
+                    floor = Integer.MAX_VALUE;
+                    getCielandFloor(temp,Input.input_int()); 
+                    System.out.println("Ciel :- "+ciel+"\nFloor :- "+floor);
+                    break; 
+                case 22:
+                    temp = root;
+                    floor = Integer.MAX_VALUE;
+                    getKthLargest(temp,Input.input_int());
+                    System.out.println("Kth largest Element : "+floor);
+                    break;
+                case 23:
+                    temp = root;
+                    System.out.println("Node with maximum subtree : "+getNodeWithMaxSubTree(temp));
+                    break;
+                case 24:
+                    temp = root;
+                    System.out.println("Diameter of the Generic Tree : "+getDiaOfTree(temp));
+                    break;
+                case 25:
+                    temp = root;
+                    itr_preOrder(temp);
+                    itr_postOrder(temp);
+                    break;
                 default:
                     continue;
             }
