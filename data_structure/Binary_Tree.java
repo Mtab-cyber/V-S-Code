@@ -61,8 +61,78 @@ public class Binary_Tree {
         display(root.right);
     }
 
+    private static int getSize(Node root){
+        if(root == null){
+            return 0;
+        }
+        return getSize(root.left) + getSize(root.right) + 1;
+    }
+
+    private static int getSum(Node root){
+        if(root == null){
+            return 0;
+        }
+        return getSum(root.left) + getSum(root.right) + root.data;
+    }
+
+    private static int getMax(Node root){
+        if(root.left == null && root.right == null){
+            return root.data;
+        }
+        if(root.left != null && root.right != null){
+            return Math.max(root.data,Math.max(getMax(root.left), getMax(root.right)));
+        }
+        else if(root.left != null){
+            return Math.max(root.data,root.left.data);
+        }
+        else{
+            return Math.max(root.data,root.right.data);
+        }
+    }
+
+    private static int getHeight(Node root){
+        if(root == null){
+            return 0;
+        }
+        return Math.max(getHeight(root.left)+1,getHeight(root.right)+1);
+    }
+
+    private static void getPreorder(Node root){
+        if(root == null){
+            return;
+        }
+        System.out.print(root.data+" ");
+        getPreorder(root.left);
+        getPreorder(root.right);
+    }
+
+    private static void getPostorder(Node root){
+        if(root == null){
+            return;
+        }
+        getPostorder(root.left);
+        getPostorder(root.right);
+        System.out.print(root.data+" ");
+    }
+
+    private static void getInorder(Node root){
+        if(root == null){
+            return;
+        }
+        getInorder(root.left);
+        System.out.print(root.data+" ");
+        getInorder(root.right);
+    }
+
     private static int menu()throws IOException{
         System.out.println("1 - Display");
+        System.out.println("2 - Size");
+        System.out.println("3 - Sum of tree");
+        System.out.println("4 - Height of tree");
+        System.out.println("5 - Maximum in the tree");
+        System.out.println("6 - PreOrder traversal");
+        System.out.println("7 - InOrder traversal");
+        System.out.println("8 - PostOrder traversal");
         return Input.input_int();
     }
 
@@ -81,6 +151,37 @@ public class Binary_Tree {
                 case 1:
                     Node temp = root;
                     display(temp);
+                    break;
+                case 2:
+                    temp = root;
+                    System.out.println("Size of tree : "+getSize(temp));
+                    break;
+                case 3:
+                    temp = root;
+                    System.out.println("Sum of tree : "+getSum(temp));
+                    break;
+                case 4:
+                    temp = root;
+                    System.out.println("Height of tree : "+getHeight(temp));
+                    break;
+                case 5:
+                    temp = root;
+                    System.out.println("Maximum of tree : "+getMax(temp));
+                    break;
+                case 6:
+                    temp = root;
+                    getPreorder(temp);
+                    System.out.println();
+                    break;
+                case 7:
+                    temp = root;
+                    getInorder(temp);
+                    System.out.println();
+                    break;
+                case 8:
+                    temp = root;
+                    getPostorder(temp);
+                    System.out.println();
                     break;
                 default:
                     continue;
