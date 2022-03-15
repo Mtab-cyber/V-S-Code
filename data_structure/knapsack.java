@@ -1,7 +1,7 @@
 package data_structure;
 import java.io.*;
 
-class knapsack
+public class knapsack
 {
     public static void main(String args[])throws IOException
     {

@@ -246,6 +246,22 @@ public class Generic_Tree {
         return root;
     }
 
+    private static Node linearize(Node root){
+        if(root.children.size() == 0){
+            return root;
+        }
+
+        Node lst = linearize(root.children.get(root.children.size() - 1));
+        while(lst.children.size() > 1){
+            Node last = root.children.remove(root.children.size() - 1);
+            Node slast = root.children.get(root.children.size() - 1);
+            Node linesl = linearize(slast);
+            linesl.children.add(last);
+        }
+
+        return lst;
+    }
+
     private static int menu()throws IOException{
         System.out.println("\n1 - Check Size");
         System.out.println("2 - User Trace");
@@ -257,6 +273,7 @@ public class Generic_Tree {
         System.out.println("8 - Level Order Line Wise ZigZag");
         System.out.println("9 - Mirror the Tree");
         System.out.println("10 - Remove Leaves");
+        System.out.println("11 - Linearize the Tree");
         return Input.input_int();
     }
 
@@ -308,6 +325,11 @@ public class Generic_Tree {
                     temp = root;
                     temp = removeLeaves(temp);
                     levelOrderLineWise(temp);
+                    break;
+                case 11:
+                    temp = root;
+                    linearize(temp);
+                    levelOrder(temp);
                     break;
                 default:
                     System.exit(0);
