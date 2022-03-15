@@ -1,6 +1,9 @@
 package data_structure;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
 public class Binary_Tree {
@@ -124,6 +127,51 @@ public class Binary_Tree {
         getInorder(root.right);
     }
 
+    private static void getLevelOrder(Node root){
+        Queue<Node> q = new LinkedList<>();
+        Queue<Node> cq = new LinkedList<>();
+        q.add(root);
+        while(!q.isEmpty()){
+            Node top = q.peek();
+            q.poll();
+            if(top.left != null){
+                cq.add(top.left);
+            }
+            if(top.right != null){
+                cq.add(top.right);
+            }
+            System.out.print(top.data+" ");
+            if(q.isEmpty()){
+                q = cq;
+                cq = new LinkedList<>();
+                System.out.println();
+            }
+        }
+    }
+
+    private static ArrayList<Integer> getPathtoRoot(Node root, int data){
+        if(root.data == data){
+            ArrayList<Integer> arr = new ArrayList<>();
+            arr.add(root.data);
+            return arr;
+        }
+        if(root.left != null){
+            ArrayList<Integer> arr = getPathtoRoot(root.left,data);
+            if(arr.size() > 0){
+                arr.add(root.data);
+                return arr;
+            }
+        }
+        if(root.right != null){
+            ArrayList<Integer> arr = getPathtoRoot(root.right,data);
+            if(arr.size() > 0){
+                arr.add(root.data);
+                return arr;
+            }
+        }
+        return new ArrayList<>();
+    }
+
     private static int menu()throws IOException{
         System.out.println("1 - Display");
         System.out.println("2 - Size");
@@ -133,6 +181,8 @@ public class Binary_Tree {
         System.out.println("6 - PreOrder traversal");
         System.out.println("7 - InOrder traversal");
         System.out.println("8 - PostOrder traversal");
+        System.out.println("9 - LevelOrder traversal");
+        System.out.println("10 - Find path to Root");
         return Input.input_int();
     }
 
@@ -140,6 +190,7 @@ public class Binary_Tree {
         Integer[] arr = {10,20,40,null,50,80,null,null,null,30,60,null,70};
         return arr;
     }
+
     public static void main(String[] args) throws IOException {
         Integer[] arr = testCase();//Input.input_Intarr(" ");
 
@@ -181,6 +232,19 @@ public class Binary_Tree {
                 case 8:
                     temp = root;
                     getPostorder(temp);
+                    System.out.println();
+                    break;
+                case 9:
+                    temp = root;
+                    getLevelOrder(temp);
+                    break;
+                case 10:
+                    temp = root;
+                    int n = Input.input_int();
+                    ArrayList<Integer> path = getPathtoRoot(temp,n);
+                    for(int i : path){
+                        System.out.print(i+" ");
+                    }
                     System.out.println();
                     break;
                 default:

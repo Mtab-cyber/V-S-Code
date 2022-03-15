@@ -358,6 +358,7 @@ public class Generic_Tree {
     private static ArrayList<Integer> findPathtoRoot(Node root, int k){
         if(root.data == k){
             ArrayList<Integer> arr = new ArrayList<>();
+            arr.add(root.data);
             return arr;
         }
 
