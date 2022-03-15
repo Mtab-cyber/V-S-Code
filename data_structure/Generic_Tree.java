@@ -32,6 +32,11 @@ public class Generic_Tree {
         }
     }
 
+    static int size;
+    static int min;
+    static int max;
+    static int height;
+
     private static Node create(int[] arr) {
         Stack<Node> stk = new Stack<>();
         for(int i : arr){
@@ -365,6 +370,37 @@ public class Generic_Tree {
         return true;
     }
 
+    private static boolean isMirrorWithoutData(Node root1, Node root2){
+        if(root1.children.size() != root2.children.size()){
+            return false;
+        }
+
+        for(int i = 0; i < root1.children.size(); i++){
+            if(!isMirrorWithoutData(root1.children.get(i),root2.children.get(root1.children.size() - 1 - i))){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static boolean isSymmetric(Node root) {
+        return isMirrorWithoutData(root,root);
+    }
+
+    private static void multiSolver(Node root,int ht){
+        if(root == null){
+            return;
+        }
+        size++;
+        max = Math.max(max,root.data);
+        min = Math.min(min,root.data);
+        height = Math.max(height,ht);
+        for(Node temp : root.children){
+            multiSolver(temp,ht+1);
+        }
+    }
+
     private static int menu()throws IOException{
         System.out.println("\n1 - Check Size");
         System.out.println("2 - User Trace");
@@ -383,6 +419,7 @@ public class Generic_Tree {
         System.out.println("15 - Distance between edges");
         System.out.println("16 - Check is both Trees are Similar");
         System.out.println("17 - Check if the tree is a Mirror of orignal");
+        System.out.println("18 - Check if the tree is Symmetric");
         return Input.input_int();
     }
 
@@ -469,15 +506,26 @@ public class Generic_Tree {
                     System.out.println("Enter the other array for second tree : ");
                     temp2 = create(Input.input_intarr(" "));   
                     System.out.println(isMirror(temp,temp2)?"Both tree are Mirror of each other":"They are not Mirror of each other");   
-                    break;          
+                    break;
+                case 18:
+                    temp = root;
+                    System.out.println(isSymmetric(temp)?"The tree is Symmetric":"The tree is not Symmetric");
+                    break;
+                case 19:
+                    temp = root;
+                    size = 0;
+                    height = 0;
+                    min = Integer.MAX_VALUE;
+                    max = Integer.MIN_VALUE;
+                    multiSolver(temp,0);
+                    System.out.println("Min Element : "+min+"\nMax Element : "+max+"\nHeight of Tree : "+height+"\nSize of Tree : "+size);
+                    break;         
                 default:
                     continue;
             }
         }
     }
 }
-
-
 /*
 * Input :- 
 12
