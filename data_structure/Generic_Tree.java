@@ -21,6 +21,7 @@ public class Generic_Tree {
     private static class Pair{
         int x;
         int y;
+        Node curr;
 
         Pair(){
 
@@ -30,6 +31,71 @@ public class Generic_Tree {
             this.x = x;
             this.y = y;
         }
+
+        Pair(Node curr, int x){
+            this.curr = curr;
+            this.x = x;
+        }
+    }
+
+    public static class GenericTree implements Iterable<Integer>{
+
+        Node root;
+
+        public GenericTree(Node root){
+            this.root = root;
+        }
+
+        @Override
+        public Iterator<Integer> iterator() {
+            Iterator<Integer> obj = new GTPreOrderIterator(root);
+            return obj;
+        }
+    }
+
+    public static class GTPreOrderIterator implements Iterator<Integer>{
+
+        Integer nval;
+        Stack<Pair> stk;
+
+        public GTPreOrderIterator(Node root){
+            stk = new Stack<>();
+            stk.push(new Pair(root,-1));
+            next();
+        }
+
+        @Override
+        public boolean hasNext() {
+            // TODO Auto-generated method stub
+            if(nval != null){
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public Integer next() {
+            // TODO Auto-generated method stub
+            Integer fr = nval;
+            nval = null;
+            while(!stk.isEmpty()){
+                Pair top = stk.peek();
+                if(top.x == -1){
+                    nval = top.curr.data;
+                    top.x++;
+                    break;
+                }
+                else if(top.x == top.curr.children.size()){
+                    stk.pop();
+                }
+                else{
+                    stk.push(new Pair(top.curr.children.get(top.x),-1));
+                    top.x++;
+                }
+            }
+            return fr;
+        }
+        
     }
 
     private static int size;
@@ -41,6 +107,9 @@ public class Generic_Tree {
     private static int state;
     private static int ciel;
     private static int floor;
+    private static int maxsumnode;
+    private static int maxsum;
+    private static int dia;
 
     private static Node create(int[] arr) {
         Stack<Node> stk = new Stack<>();
@@ -448,18 +517,96 @@ public class Generic_Tree {
         }
     }
 
-    private static void itr_postOrder(Node temp) {
+    private static void itr_postOrder(Node root) {
+        Stack<Pair> stk = new Stack<>();
+        stk.push(new Pair(root,-1));
+        while(stk.isEmpty() == false){
+            if(stk.peek().x == -1){
+                stk.peek().x++;
+            }
+            else if(stk.peek().x < stk.peek().curr.children.size()){
+                stk.peek().x++;
+                stk.push(new Pair(stk.peek().curr.children.get(stk.peek().x - 1),-1));
+            }
+            else{
+                System.out.println(stk.peek().curr.data);
+                stk.pop();
+            }
+        }
     }
 
-    private static void itr_preOrder(Node temp) {
+    private static void itr_preOrder(Node root) {
+        Stack<Pair> stk = new Stack<>();
+        stk.push(new Pair(root,-1));
+        while(stk.isEmpty() == false){
+            if(stk.peek().x == -1){
+                System.out.println(stk.peek().curr.data);
+                stk.peek().x++;
+            }
+            else if(stk.peek().x < stk.peek().curr.children.size()){
+                stk.peek().x++;
+                stk.push(new Pair(stk.peek().curr.children.get(stk.peek().x - 1),-1));
+            }
+            else{
+                stk.pop();
+            }
+        }
     }
 
-    private static int getDiaOfTree(Node temp) {
-        return 0;
+    private static int getDiaOfTree(Node root) {
+        /*
+        *My Approach
+        int ht = 0;
+        int ht2 = 0;
+        Node maxht = null;
+        for(Node temp : root.children){
+            int tempht = ht;
+            ht = Math.max(ht, height(temp));
+            if(ht != tempht){
+                maxht = temp;
+            }
+        }
+        for(Node temp : root.children){
+            if(temp != maxht){
+                ht2 = Math.max(ht2, height(temp));
+            }
+        }
+        return ht+ht2+2;
+        */
+
+        int dch = -1;
+        int sdch = -1;
+
+        for(Node temp : root.children){
+            int ch = getDiaOfTree(temp);
+            if(ch > dch){
+                sdch = dch;
+                dch = ch;
+            }
+            else if(ch > sdch){
+                sdch = ch;
+            }
+        }
+
+        if(sdch + dch + 2 > dia){
+            dia = sdch + dch + 2;
+        }
+
+        dch += 1;
+
+        return dch;
     }
 
-    private static int getNodeWithMaxSubTree(Node temp) {
-        return 0;
+    private static int getNodeWithMaxSumSubTree(Node root) {
+        int sum = 0;
+        for(Node temp : root.children){
+            int csum = getNodeWithMaxSumSubTree(temp);
+            sum += csum;
+        }
+        sum += root.data;
+        maxsum = Math.max(maxsum,sum);
+        if(maxsum == sum)maxsumnode = root.data;
+        return sum;
     }
 
     private static int menu()throws IOException{
@@ -485,9 +632,10 @@ public class Generic_Tree {
         System.out.println("20 - Get Predecessor and Successor");
         System.out.println("21 - Get Ciel and Floor");
         System.out.println("22 - Get Kth Largest Element");
-        System.out.println("23 - Node with maximum subtree");
+        System.out.println("23 - Node with maximum sum of subtree");
         System.out.println("24 - Diameter of the Generic Tree");
         System.out.println("25 - Iterative Pre-Order and Post-Order");
+        System.out.println("26 - Iterable tree");
         return Input.input_int();
     }
 
@@ -610,7 +758,10 @@ public class Generic_Tree {
                     break;
                 case 23:
                     temp = root;
-                    System.out.println("Node with maximum subtree : "+getNodeWithMaxSubTree(temp));
+                    maxsumnode = 0;
+                    maxsum = Integer.MIN_VALUE;
+                    getNodeWithMaxSumSubTree(temp);
+                    System.out.println("Node with maximum sum node of subtree : "+maxsumnode);
                     break;
                 case 24:
                     temp = root;
@@ -620,6 +771,13 @@ public class Generic_Tree {
                     temp = root;
                     itr_preOrder(temp);
                     itr_postOrder(temp);
+                    break;
+                case 26:
+                    temp = root;
+                    GenericTree gti = new GenericTree(temp);
+                    for(int i : gti){
+                        System.out.print(i+" ");
+                    }
                     break;
                 default:
                     continue;
