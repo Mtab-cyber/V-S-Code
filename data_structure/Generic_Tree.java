@@ -8,6 +8,28 @@ public class Generic_Tree {
     private static class Node{
         int data;
         ArrayList<Node> children = new ArrayList<>();
+
+        Node(){
+
+        }
+
+        Node(int data){
+            this.data = data;
+        }
+    }
+
+    private static class Pair{
+        int x;
+        int y;
+
+        Pair(){
+
+        }
+
+        Pair(int x, int y){
+            this.x = x;
+            this.y = y;
+        }
     }
 
     private static void create(int[] arr) {
@@ -98,51 +120,130 @@ public class Generic_Tree {
         return;
     }
 
-    private static void levelOrder(Node root) {
+    private static void levelOrderLineWise(Node root) {
         if(root == null){
             return;
         }
         Queue<Node> q = new LinkedList<>();
         Queue<Node> cq = new LinkedList<>();
         q.add(root);
-        System.out.println(q.peek().data);
-        while(!cq.isEmpty()){
-            while(!q.isEmpty()){
-                for(Node temp : q.peek().children){
-                    System.out.print(" "+temp.data);
-                    cq.add(temp);
-                }
-                q.remove();
+        while(!q.isEmpty()){
+            System.out.print(q.peek().data+" ");
+            for(Node temp : q.peek().children){
+                cq.add(temp);
             }
-            q = cq;
-            cq = new LinkedList<>();
-            System.out.println();
+            q.poll();
+            if(q.isEmpty()){
+                q = cq;
+                cq = new LinkedList<>();
+                System.out.println();
+            }
         }
-        System.out.print(".");
         return;
     }
 
-    private static void levelOrderLineWise(Node root) {
+    private static void levelOrderLineWise3(Node root) {
         if(root == null){
             return;
         }
         Queue<Node> q = new LinkedList<>();
         q.add(root);
-        StringBuilder sb = new StringBuilder();
-        System.out.println(q.peek().data);
+        q.add(new Node(-1));
         while(!q.isEmpty()){
+            System.out.print(q.peek().data+" ");
             for(Node temp : q.peek().children){
-                sb.append(temp.data+" ");
                 q.add(temp);
             }
-            if(sb.length()>0){
-                System.out.println(sb.toString());
-                sb.delete(0, sb.length());
+            q.poll();
+            if(q.peek().data == -1){
+                System.out.println();
+                q.add(new Node(-1));
             }
+        }
+        return;
+    }
+
+    private static void levelOrder(Node root) {
+        if(root == null){
+            return;
+        }
+        Queue<Node> q = new LinkedList<>();
+        q.add(root);
+        System.out.print(q.peek().data);
+        while(!q.isEmpty()){
+            for(Node temp : q.peek().children){
+                System.out.print(" "+temp.data);
+                q.add(temp);
+            }
+            
             q.remove();
         }
         System.out.print(".");
         return;
+    }
+
+    private static void levelOrderLineWiseZigZag(Node root) {
+        if(root == null){
+            return;
+        }
+        Stack<Node> ms = new Stack<>();
+        Stack<Node> cs = new Stack<>();
+        ms.push(root);
+        int level = 0;
+        while(!ms.isEmpty()){
+            System.out.print(ms.peek().data+" ");
+            if(level%2 == 0){
+                for(Node temp : ms.peek().children){
+                    cs.push(temp);
+                }
+            }
+            else{
+                for(int i = ms.peek().children.size()-1; i >= 0; i--){
+                    cs.push(ms.peek().children.get(i));
+                }
+            }
+            ms.pop();
+            if(ms.isEmpty()){
+                ms = cs;
+                cs = new Stack<>();
+                level++;
+                System.out.println();
+            }
+        }
+        return;
+    }
+
+    private static Node mirror(Node root){
+        if(root == null){
+            return root;
+        }
+        Queue<Node> q = new LinkedList<>();
+        q.add(root);
+        while(!q.isEmpty()){
+            for(Node temp : q.peek().children){
+                q.add(temp);
+            }
+            Collections.reverse(q.peek().children);
+            q.poll();
+        }
+        return root;
+    }
+
+    private static Node removeLeaves(Node root){
+        if(root == null){
+            return root;
+        }
+        for(int i = root.children.size()-1; i >= 0; i--){
+            if(root.children.get(i).children.size() == 0){
+                root.children.remove(root.children.get(i));
+            }
+        }
+
+        for(Node temp : root.children){
+            removeLeaves(temp);
+        }
+
+        return root;
     }
 
     private static int menu()throws IOException{
@@ -153,6 +254,9 @@ public class Generic_Tree {
         System.out.println("5 - Traversal of Tree");
         System.out.println("6 - Level Order");
         System.out.println("7 - Level Order Line Wise");
+        System.out.println("8 - Level Order Line Wise ZigZag");
+        System.out.println("9 - Mirror the Tree");
+        System.out.println("10 - Remove Leaves");
         return Input.input_int();
     }
 
@@ -189,6 +293,20 @@ public class Generic_Tree {
                     break;
                 case 7:
                     temp = root;
+                    levelOrderLineWise(temp);
+                    break;
+                case 8:
+                    temp = root;
+                    levelOrderLineWiseZigZag(temp);
+                    break;
+                case 9:
+                    temp = root;
+                    temp = mirror(temp);
+                    levelOrderLineWise(temp);
+                    break;
+                case 10:
+                    temp = root;
+                    temp = removeLeaves(temp);
                     levelOrderLineWise(temp);
                     break;
                 default:
