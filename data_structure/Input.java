@@ -27,8 +27,8 @@ public class Input {
         return (br.readLine());
     }
 
-    public static int[] input_intarr(char ch)throws IOException{
-        String[] str = br.readLine().split(ch+"");
+    public static int[] input_intarr(String string)throws IOException{
+        String[] str = br.readLine().split(string+"");
         int[] arr = new int[str.length];
         int i = 0;
         for(String temp : str){

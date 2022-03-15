@@ -32,13 +32,13 @@ public class Generic_Tree {
         }
     }
 
-    private static void create(int[] arr) {
+    private static Node create(int[] arr) {
         Stack<Node> stk = new Stack<>();
         for(int i : arr){
             if(i == -1){
                 if(stk.isEmpty()){
                     System.out.println("Unhandled Exception");
-                    return;
+                    return null;
                 }
                 stk.pop();
             }
@@ -55,6 +55,7 @@ public class Generic_Tree {
                 }
             }
         }
+        return root;
     }
 
     private static int size(Node root) {
@@ -251,15 +252,88 @@ public class Generic_Tree {
             return root;
         }
 
-        Node lst = linearize(root.children.get(root.children.size() - 1));
-        while(lst.children.size() > 1){
-            Node last = root.children.remove(root.children.size() - 1);
-            Node slast = root.children.get(root.children.size() - 1);
-            Node linesl = linearize(slast);
-            linesl.children.add(last);
+        Node res = linearize(root.children.get(root.children.size() - 1));
+
+        while(root.children.size() > 1){
+            Node lst = root.children.remove(root.children.size() - 1);
+            Node slst = root.children.get(root.children.size() - 1);
+            Node lslst = linearize(slst);
+            lslst.children.add(lst);
         }
 
-        return lst;
+        return res;
+    }
+
+    private static boolean find(Node root, int k){
+        if(root.data == k){
+            return true;
+        }
+        for(Node temp : root.children){
+            boolean ans = find(temp,k);
+            if(ans)
+                return ans;
+        }
+        return false;
+    }
+    
+    private static ArrayList<Integer> findPathtoRoot(Node root, int k){
+        if(root.data == k){
+            ArrayList<Integer> arr = new ArrayList<>();
+            return arr;
+        }
+
+        for(Node temp : root.children){
+            ArrayList<Integer> arr = findPathtoRoot(temp,k);
+            if(arr.size() > 0){
+                arr.add(temp.data);
+                return arr;
+            }
+        }
+
+        return new ArrayList<>();
+    }
+
+    private static int lca(Node root, int a, int b){
+        ArrayList<Integer> atr = findPathtoRoot(root,a);
+        ArrayList<Integer> btr = findPathtoRoot(root,b);
+        int i = atr.size() - 1;
+        int j = btr.size() - 1;
+
+        while(i >= 0 && j >= 0 && atr.get(i) == btr.get(j)){
+            i--;
+            j--;
+        }
+
+        return (int)atr.get(++j);
+    }
+
+    private static int distNode(Node root, int a, int b){
+        ArrayList<Integer> atr = findPathtoRoot(root,a);
+        ArrayList<Integer> btr = findPathtoRoot(root,b);
+        int i = atr.size() - 1;
+        int j = btr.size() - 1;
+
+        while(i >= 0 && j >= 0 && atr.get(i) == btr.get(j)){
+            i--;
+            j--;
+        }
+
+        return (++i + ++j);
+    }
+
+    private static boolean checkSimilar(Node root1, Node root2){
+        if(root1.children.size() == root2.children.size()){
+            for(int i = 0; i < root1.children.size(); i++){
+                boolean temp = checkSimilar(root1.children.get(i),root2.children.get(i));
+                if(temp == false){
+                    return false;
+                }
+            }
+        }
+        else{
+            return false;
+        }
+        return true;
     }
 
     private static int menu()throws IOException{
@@ -274,16 +348,23 @@ public class Generic_Tree {
         System.out.println("9 - Mirror the Tree");
         System.out.println("10 - Remove Leaves");
         System.out.println("11 - Linearize the Tree");
+        System.out.println("12 - Find an Element");
+        System.out.println("13 - Find path to root");
+        System.out.println("14 - Lowest Common Ancestor");
+        System.out.println("15 - Distance between edges");
+        System.out.println("16 - Check is both Trees are Similar");
         return Input.input_int();
     }
 
     public static void main(String[] args)throws IOException {
         int n = Input.input_int();
-        int[] arr = Input.input_intarr(' ');
+        int[] arr = Input.input_intarr(" ");
 
         create(arr);
         while(true){
             switch(menu()){
+                case 0:
+                    System.exit(0);
                 case 1:
                     Node temp = root;
                     System.out.println("Size of tree :- "+size(temp));
@@ -331,8 +412,30 @@ public class Generic_Tree {
                     linearize(temp);
                     levelOrder(temp);
                     break;
+                case 12:
+                    temp = root;
+                    System.out.println(find(temp,Input.input_int()));
+                    break;
+                case 13:
+                    temp = root;
+                    System.out.println(findPathtoRoot(temp,Input.input_int()));
+                    break;
+                case 14:
+                    temp = root;
+                    System.out.println(lca(temp,Input.input_int(),Input.input_int()));
+                    break;
+                case 15:
+                    temp = root;
+                    System.out.println(distNode(temp,Input.input_int(),Input.input_int()));
+                    break;
+                case 16:
+                    temp = root;
+                    System.out.println("Enter the other array for second tree : ");
+                    Node temp2 = create(Input.input_intarr(" "));   
+                    System.out.println(checkSimilar(temp,temp2)?"Both tree are Similar":"They are not similar to each other");   
+                    break;          
                 default:
-                    System.exit(0);
+                    continue;
             }
         }
     }
