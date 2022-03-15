@@ -336,6 +336,35 @@ public class Generic_Tree {
         return true;
     }
 
+    private static ArrayList<Integer> getChildrenData(Node root){
+        ArrayList<Integer> arr = new ArrayList<>();
+        for(Node temp : root.children){
+            arr.add(temp.data);
+        }
+        return arr;
+    }
+
+    private static boolean isMirror(Node root1, Node root2){
+        if(root1.children.size() != root2.children.size()){
+            return false;
+        }
+        for(int i = 0; i < root1.children.size(); i++){
+            ArrayList<Integer> arr1 = getChildrenData(root1.children.get(i));
+            ArrayList<Integer> arr2 = getChildrenData(root2.children.get(root2.children.size() - 1 - i));
+            Collections.reverse(arr2);
+            if(!arr1.equals(arr2)){
+                return false;
+            }
+            else{
+                boolean temp = isMirror(root1.children.get(i),root2.children.get(root2.children.size() - 1 - i));
+                if(!temp){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     private static int menu()throws IOException{
         System.out.println("\n1 - Check Size");
         System.out.println("2 - User Trace");
@@ -353,6 +382,7 @@ public class Generic_Tree {
         System.out.println("14 - Lowest Common Ancestor");
         System.out.println("15 - Distance between edges");
         System.out.println("16 - Check is both Trees are Similar");
+        System.out.println("17 - Check if the tree is a Mirror of orignal");
         return Input.input_int();
     }
 
@@ -434,6 +464,12 @@ public class Generic_Tree {
                     Node temp2 = create(Input.input_intarr(" "));   
                     System.out.println(checkSimilar(temp,temp2)?"Both tree are Similar":"They are not similar to each other");   
                     break;          
+                case 17:
+                    temp = root;
+                    System.out.println("Enter the other array for second tree : ");
+                    temp2 = create(Input.input_intarr(" "));   
+                    System.out.println(isMirror(temp,temp2)?"Both tree are Mirror of each other":"They are not Mirror of each other");   
+                    break;          
                 default:
                     continue;
             }
@@ -446,4 +482,5 @@ public class Generic_Tree {
 * Input :- 
 12
 10 20 50 -1 60 -1 -1 30 70 -1 80 11 -1 100 -1 -1 90 -1 40 100
+mirror : - 10 30 40 100 -1 -1 90 -1 80 100 -1 11 -1 -1 70 -1 -1 20 60 -1 50
 */
