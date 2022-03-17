@@ -1,4 +1,4 @@
-package data_structure;
+
 import java.io.*;
 import java.util.*;
 public class Generic_Tree {

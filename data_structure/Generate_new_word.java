@@ -1,5 +1,4 @@
 
-package data_structure;
 import java.util.*;
 
 public class Generate_new_word {

@@ -1,5 +1,3 @@
-package data_structure;
-
 import java.util.Scanner;
 
 public class merge_sort {

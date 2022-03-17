@@ -1,5 +1,4 @@
 
-package data_structure;
 import java.util.Scanner;
 
 public class codeforce {

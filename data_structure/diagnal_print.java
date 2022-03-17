@@ -1,4 +1,3 @@
-package data_structure;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;

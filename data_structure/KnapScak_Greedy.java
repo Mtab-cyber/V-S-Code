@@ -1,4 +1,4 @@
-package data_structure;
+
 import java.util.*;
 class KnapSack_Greedy 
 { 

@@ -1,4 +1,4 @@
-package data_structure;
+
 import java.io.*;
 
 public class knapsack

@@ -1,4 +1,4 @@
-package data_structure;
+
 public class Flip_Bits {
 	public static int flipBits(int[] arr,int n) {
         //Write your code here
