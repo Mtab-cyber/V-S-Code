@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch chip",
+            "request": "launch",
+            "mainClass": "chip",
+            "projectName": "V-S-Code_baa8602f"
+        },
+        {
+            "type": "java",
             "name": "Launch Current File",
             "request": "launch",
             "mainClass": "${file}"
