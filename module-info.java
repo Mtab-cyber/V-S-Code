@@ -1,2 +1,0 @@
-module data_structure {
-}

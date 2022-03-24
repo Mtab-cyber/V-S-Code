@@ -1,6 +1,28 @@
 
 /* package codechef; // don't place package name! */
+/*
+import java.util.Scanner;
 
+public class cf1{
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        int t = scan.nextInt();
+        while(t-->0){
+            
+        }
+    }
+}
+
+int count = 0;
+            for (int L = 1; L * (L + 1) < 2 * N; L++) {
+                double a = (double)((1.0 * N - (L * (L + 1)) / 2) / (L + 1));
+                if (a - (int)a == 0.0){
+                    count = L;
+                    break;
+                }
+            }
+            System.out.println()
+*/
 import java.util.*;
 import java.lang.*;
 import java.io.*;
